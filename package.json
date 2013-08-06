@@ -1,0 +1,14 @@
+{
+  "name": "express-django",
+  "version": "0.0.1",
+  "description": "Some helpers to make express function like django framework.",
+  "keywords": [],
+  "author": "Muhammed K K <ajumell@gmail.com>",
+  "repository": { "type": "git", "url": "git://github.com/ajumell/express-django.git" },
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  },
+  "main": "index"
+}
