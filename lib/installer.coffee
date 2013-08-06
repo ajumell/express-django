@@ -38,12 +38,13 @@ class Installer
 
     setup_routes: ->
         try
-            urls = require("urls")
-            app = @app
-            start = @url
-            start = start + "/" if start[-1] is not "/"
-            for url in ruls
-                app.all(start + url.pattern, url.view)
+            urls = require("routes")
+            if urls instanceof Array
+                app = @app
+                start = @url
+                start = start + "/" if start[-1] is not "/"
+                for url in urls
+                    app.all(start + url.pattern, url.view)
 
 
 module.exports = Installer
