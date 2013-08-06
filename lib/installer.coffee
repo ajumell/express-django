@@ -13,10 +13,11 @@ express = require("express")
 ###
 
 class Installer
-    constructor: ({@app, @url, @dirname}) ->
+    constructor: ({@app, @url, @dirname, @db}) ->
         @setup_templates_dir()
         @setup_routes()
         @setup_static()
+        @setup_middlewares()
 
     setup_templates_dir: () ->
         root = @dirname
@@ -38,13 +39,21 @@ class Installer
 
     setup_routes: ->
         try
-            urls = require("routes")
+            urls = require(path.join(@dirname, "routes"))
             if urls instanceof Array
                 app = @app
                 start = @url
                 start = start + "/" if start[-1] is not "/"
                 for url in urls
                     app.all(start + url.pattern, url.view)
+
+    setup_middlewares: ->
+        try
+            middlewares = require(path.join(@dirname, "middlewares"))
+            if middlewares instanceof Array
+                app = @app
+                for middleware in middlewares
+                    app.use middleware
 
 
 module.exports = Installer
