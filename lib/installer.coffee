@@ -1,5 +1,6 @@
 path = require("path")
 fs = require("fs")
+express = require("express")
 
 ###
     1. Update viwes
@@ -14,6 +15,8 @@ fs = require("fs")
 class Installer
     constructor: ({@app, @url, @dirname}) ->
         @setup_templates_dir()
+        @setup_routes()
+        @setup_static()
 
     setup_templates_dir: () ->
         root = @dirname
@@ -22,7 +25,25 @@ class Installer
         dirs = [path.join(root, 'templates'), path.join(root, 'views')]
         for template_dir in dirs
             fs.exists template_dir, (exists) ->
-                if exists
-                    template_dirs.push templates_dir
+                template_dirs.push templates_dir if exists
+
+    setup_static: ->
+        root = @dirname
+        app = @app
+        root = @dirname
+        dirs = [path.join(root, 'templates'), path.join(root, 'views')]
+        for static_dir in dirs
+            fs.exists static_dir, (exists) ->
+                app.use express.static(static_dir) if exists
+
+    setup_routes: ->
+        try
+            urls = require("urls")
+            app = @app
+            start = @url
+            start = start + "/" if start[-1] is not "/"
+            for url in ruls
+                app.all(start + url.pattern, url.view)
+
 
 module.exports = Installer
