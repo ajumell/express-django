@@ -26,8 +26,14 @@ createApp = () ->
             dirname: app
     project
 
+route = (name, pattern, fn) ->
+    fn.name = name
+    fn.pattern = pattern
+    return fn
+
 module.exports =
     Installer: require("./installer")
     View: require("./view")
     express: express
     new: createApp
+    route: route
