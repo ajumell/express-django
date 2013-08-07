@@ -45,8 +45,8 @@ class Installer
             app = @app
             start = @url
             start = start + "/" if start[-1] is not "/"
-            for url in routes
-                app.all(start + url.pattern, url.route)
+            for route in routes
+                app.all(start + route.pattern, route)
 
     setup_middlewares: ->
         file_path = path.join(@dirname, "middlewares" + ".js")
