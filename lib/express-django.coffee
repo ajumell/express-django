@@ -1,22 +1,33 @@
 createApp = undefined
 express = undefined
 express = require("express")
-
-install = (app, url) ->
-    app = require(app)  if app instanceof String
-    app.install
-        app: project
-        url: url
+Installer = require("./installer")
+fs = require("fs")
+path = require("path")
 
 add_routing = (app) ->
 
 createApp = () ->
     project = undefined
     project = express()
-    project.install = install
+    project.install = ({app, url}) ->
+        if not fs.existsSync app
+            app = require.resolve(app)
+        else
+            app = path.resolve(app)
+
+        stat = fs.lstatSync(app)
+        if stat.isFile()
+            app = path.dirname(app)
+
+        installer = new Installer
+            app: project
+            url: url
+            dirname: app
     project
 
 module.exports =
     Installer: require("./installer")
     View: require("./view")
-    express: createApp
+    express: express
+    new: createApp
