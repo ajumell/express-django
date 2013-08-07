@@ -13,7 +13,7 @@ express = require("express")
 ###
 
 class Installer
-    constructor: ({@app, @url, @dirname, @db}) ->
+    constructor: ({@app, @url, @dirname}) ->
         @setup_templates_dir()
         @setup_routes()
         @setup_static()
@@ -38,22 +38,24 @@ class Installer
                 app.use express.static(static_dir) if exists
 
     setup_routes: ->
-        try
-            urls = require(path.join(@dirname, "routes"))
-            if urls instanceof Array
-                app = @app
-                start = @url
-                start = start + "/" if start[-1] is not "/"
-                for url in urls
-                    app.all(start + url.pattern, url.route)
+        file_path = path.join(@dirname, "routes")
+        return if not fs.existsSync(file_path + ".js")
+        routes = require(file_path)
+        if routes instanceof Array
+            app = @app
+            start = @url
+            start = start + "/" if start[-1] is not "/"
+            for url in routes
+                app.all(start + url.pattern, url.route)
 
     setup_middlewares: ->
-        try
-            middlewares = require(path.join(@dirname, "middlewares"))
-            if middlewares instanceof Array
-                app = @app
-                for middleware in middlewares
-                    app.use middleware
+        file_path = path.join(@dirname, "middlewares" + ".js")
+        return if not fs.existsSync(file_path)
+        middlewares = require(file_path)
+        if middlewares instanceof Array
+            app = @app
+            for middleware in middlewares
+                app.use middleware
 
 
 module.exports = Installer
