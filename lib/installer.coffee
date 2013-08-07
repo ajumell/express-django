@@ -45,7 +45,7 @@ class Installer
                 start = @url
                 start = start + "/" if start[-1] is not "/"
                 for url in urls
-                    app.all(start + url.pattern, url.view)
+                    app.all(start + url.pattern, url.route)
 
     setup_middlewares: ->
         try
