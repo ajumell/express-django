@@ -1,5 +1,4 @@
 createApp = undefined
-express = undefined
 express = require("express")
 Installer = require("./installer")
 fs = require("fs")
@@ -32,8 +31,7 @@ route = (name, pattern, fn) ->
     return fn
 
 module.exports =
-    Installer: require("./installer")
-    View: require("./view")
-    express: express
-    new: createApp
-    route: route
+    "View": require("./view")
+    "express": express
+    "new": createApp
+    "route": route
